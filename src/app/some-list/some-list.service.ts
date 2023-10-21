@@ -1,6 +1,6 @@
 import { DestroyRef, Injectable, signal, Signal, WritableSignal } from '@angular/core';
 import { SomeListEntryViewmodel, SomeListViewmodel } from "./models";
-import { interval, Observable } from "rxjs";
+import { interval, Observable, Subscription } from "rxjs";
 import { SomeListDataService } from "./some-list-data.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
@@ -9,21 +9,21 @@ export class SomeListService {
   public readonly viewmodel: Signal<SomeListViewmodel>;
   private readonly _viewmodel: WritableSignal<SomeListViewmodel>;
 
+  private obsTest$$: Subscription | undefined;
+
   constructor(private readonly someListDataService: SomeListDataService, private readonly destroyRef: DestroyRef) {
-    this._viewmodel = signal({
-      headline: 'Unknown',
-      entries: undefined,
-      isLoading: false
-    });
+    this._viewmodel = signal(this.getVmInitState());
     this.viewmodel = this._viewmodel.asReadonly();
   }
 
   public initObservableTest() {
+    this.resetViewModelStateToZero();
+
     this.setVmToLoading();
 
     const data$ = this.someListDataService.getObsData();
 
-    data$.pipe(
+    this.obsTest$$ = data$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((data) => {
       this._viewmodel.update((currValue) => {
@@ -39,6 +39,8 @@ export class SomeListService {
   }
 
   public async initPromiseTest() {
+    this.resetViewModelStateToZero();
+
     this.setVmToLoading();
 
     const data = await this.someListDataService.getPromiseData();
@@ -52,6 +54,19 @@ export class SomeListService {
         })
       }
     })
+  }
+
+  private resetViewModelStateToZero() {
+    this.obsTest$$?.unsubscribe();
+    this._viewmodel.set(this.getVmInitState());
+  }
+
+  private getVmInitState(): SomeListViewmodel {
+    return {
+      headline: 'Unknown',
+      entries: undefined,
+      isLoading: false
+    }
   }
 
   private createVmEntry(currEntries: SomeListEntryViewmodel[], entryTitle: string) {
