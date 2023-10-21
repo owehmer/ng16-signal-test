@@ -1,7 +1,8 @@
 export interface SomeListViewmodel {
   headline: string;
   entries: SomeListEntryViewmodel[] | undefined;
-  isLoading: boolean;
+  showEntryLoadingIndicator: boolean;
+  showGlobalLoadingIndicator: boolean;
 }
 
 export interface SomeListEntryViewmodel {

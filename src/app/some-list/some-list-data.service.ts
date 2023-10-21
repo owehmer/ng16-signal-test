@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { interval, Observable } from "rxjs";
+import { interval, map, Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -46,5 +46,11 @@ export class SomeListDataService {
     });
 
     return data$;
+  }
+
+  public getLoadingState() {
+    return interval(1000).pipe(
+      map((counter) => counter % 4 === 0)
+    )
   }
 }

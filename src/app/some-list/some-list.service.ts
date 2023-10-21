@@ -10,6 +10,7 @@ export class SomeListService {
   private readonly _viewmodel: WritableSignal<SomeListViewmodel>;
 
   private obsTest$$: Subscription | undefined;
+  private globalLoading$$: Subscription | undefined;
 
   constructor(private readonly someListDataService: SomeListDataService, private readonly destroyRef: DestroyRef) {
     this._viewmodel = signal(this.getVmInitState());
@@ -20,6 +21,7 @@ export class SomeListService {
     this.resetViewModelStateToZero();
 
     this.setVmToLoading();
+    this.listenToGlobalLoadingState(); // Uncomment for no global loading
 
     const data$ = this.someListDataService.getObsData();
 
@@ -29,7 +31,7 @@ export class SomeListService {
       this._viewmodel.update((currValue) => {
         return {
           ...currValue,
-          isLoading: false,
+          showEntryLoadingIndicator: false,
           entries: data.map((entryTitle) => {
             return this.createVmEntry(currValue.entries ?? [], entryTitle);
           })
@@ -48,7 +50,7 @@ export class SomeListService {
     this._viewmodel.update((currValue) => {
       return {
         ...currValue,
-        isLoading: false,
+        showEntryLoadingIndicator: false,
         entries: data.map((entryTitle) => {
           return this.createVmEntry(currValue.entries ?? [], entryTitle);
         })
@@ -58,14 +60,16 @@ export class SomeListService {
 
   private resetViewModelStateToZero() {
     this.obsTest$$?.unsubscribe();
+    this.globalLoading$$?.unsubscribe();
     this._viewmodel.set(this.getVmInitState());
   }
 
   private getVmInitState(): SomeListViewmodel {
     return {
-      headline: 'Unknown',
+      headline: 'Some untranslated headline string',
       entries: undefined,
-      isLoading: false
+      showEntryLoadingIndicator: false,
+      showGlobalLoadingIndicator: false,
     }
   }
 
@@ -81,7 +85,7 @@ export class SomeListService {
   private setVmToLoading() {
     this._viewmodel.update((currentData) => ({
       ...currentData,
-      isLoading: true
+      showEntryLoadingIndicator: true
     }));
   }
 
@@ -104,6 +108,19 @@ export class SomeListService {
           ...currentData.entries.slice(existingEntryIndex + 1)
         ]
       }
+    })
+  }
+
+  private listenToGlobalLoadingState() {
+    this.globalLoading$$ = this.someListDataService.getLoadingState().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((isLoading) => {
+      this._viewmodel.update((currentData) => {
+        return {
+          ...currentData,
+          showGlobalLoadingIndicator: isLoading
+        }
+      })
     })
   }
 }
