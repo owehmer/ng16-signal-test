@@ -1,0 +1,18 @@
+<button (click)="initVm()">Start Loading</button>
+
+<ng-container *ngIf="viewModel() as vm">
+  <ng-container *ngIf="!vm.isLoading; else loadingTemplate">
+
+    <h1>{{vm.headline}}</h1>
+
+    <h2 *ngIf="!vm.entries || vm.entries.length === 0">No entries</h2>
+
+    <p *ngFor="let entry of vm.entries" (click)="entry.onClick()">
+      {{entry.name}} -- {{entry.counter}}
+    </p>
+  </ng-container>
+
+  <ng-template #loadingTemplate>
+    This is loading...
+  </ng-template>
+</ng-container>
