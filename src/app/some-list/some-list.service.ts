@@ -1,12 +1,15 @@
-import { Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import { DestroyRef, Injectable, signal, Signal, WritableSignal } from '@angular/core';
 import { SomeListEntryViewmodel, SomeListViewmodel } from "./models";
+import { interval, Observable } from "rxjs";
+import { SomeListDataService } from "./some-list-data.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Injectable()
 export class SomeListService {
   public readonly viewmodel: Signal<SomeListViewmodel>;
   private readonly _viewmodel: WritableSignal<SomeListViewmodel>;
 
-  constructor() {
+  constructor(private readonly someListDataService: SomeListDataService, private readonly destroyRef: DestroyRef) {
     this._viewmodel = signal({
       headline: 'Unknown',
       entries: undefined,
@@ -15,32 +18,56 @@ export class SomeListService {
     this.viewmodel = this._viewmodel.asReadonly();
   }
 
-  public async initViewModelOnce() {
-    this._viewmodel.update((currentData) => ({
-      ...currentData,
-      isLoading: true
-    }));
+  public initViewModelAsStream() {
+    this.setVmToLoading();
 
-    const data = await new Promise<string[]>((resolve) => {
-      setTimeout(() => {
-        resolve(['first', 'second']);
-      }, 2000)
-    });
+    const data$ = this.someListDataService.getObsData();
+
+    data$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((data) => {
+      this._viewmodel.update((currValue) => {
+        return {
+          ...currValue,
+          isLoading: false,
+          entries: data.map((entryTitle) => {
+            return this.createVmEntry(currValue.entries ?? [], entryTitle);
+          })
+        }
+      })
+    })
+  }
+
+  public async initViewModelOnce() {
+    this.setVmToLoading();
+
+    const data = await this.someListDataService.getPromiseData();
 
     this._viewmodel.update((currValue) => {
       return {
         ...currValue,
         isLoading: false,
         entries: data.map((entryTitle) => {
-          const existingEntry = currValue.entries?.find((entry) => entry.name === entryTitle);
-          return {
-            name: entryTitle,
-            counter: (existingEntry?.counter ?? 0),
-            onClick: () => this.increaseCounter(entryTitle)
-          }
+          return this.createVmEntry(currValue.entries ?? [], entryTitle);
         })
       }
     })
+  }
+
+  private createVmEntry(currEntries: SomeListEntryViewmodel[], entryTitle: string) {
+    const existingEntry = currEntries?.find((entry) => entry.name === entryTitle);
+    return {
+      name: entryTitle,
+      counter: (existingEntry?.counter ?? 0),
+      onClick: () => this.increaseCounter(entryTitle)
+    }
+  }
+
+  private setVmToLoading() {
+    this._viewmodel.update((currentData) => ({
+      ...currentData,
+      isLoading: true
+    }));
   }
 
   private increaseCounter(title: string) {

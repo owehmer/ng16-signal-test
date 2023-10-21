@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Signal } from '@angular/core';
 import { SomeListService } from "./some-list.service";
-import { SomeListViewmodel } from "./models";
+import { SomeListEntryViewmodel, SomeListViewmodel } from "./models";
 import { CommonModule } from "@angular/common";
 
 @Component({
@@ -20,6 +20,11 @@ export class SomeListComponent {
   }
 
   public initVm() {
-    this.someListService.initViewModelOnce();
+    // this.someListService.initViewModelOnce();
+    this.someListService.initViewModelAsStream();
+  }
+
+  public trackByName(_: number, entry: SomeListEntryViewmodel) {
+    return entry.name;
   }
 }
