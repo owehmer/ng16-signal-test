@@ -1,4 +1,5 @@
-<button (click)="initVm()">Start Loading</button>
+<button (click)="initPromiseTest()">Promise data test</button>
+<button (click)="initObservableTest()">Observable data test</button>
 
 <ng-container *ngIf="viewModel() as vm">
   <ng-container *ngIf="!vm.isLoading; else loadingTemplate">

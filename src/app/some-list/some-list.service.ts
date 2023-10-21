@@ -18,7 +18,7 @@ export class SomeListService {
     this.viewmodel = this._viewmodel.asReadonly();
   }
 
-  public initViewModelAsStream() {
+  public initObservableTest() {
     this.setVmToLoading();
 
     const data$ = this.someListDataService.getObsData();
@@ -38,7 +38,7 @@ export class SomeListService {
     })
   }
 
-  public async initViewModelOnce() {
+  public async initPromiseTest() {
     this.setVmToLoading();
 
     const data = await this.someListDataService.getPromiseData();

@@ -19,9 +19,12 @@ export class SomeListComponent {
     this.viewModel = this.someListService.viewmodel;
   }
 
-  public initVm() {
-    // this.someListService.initViewModelOnce();
-    this.someListService.initViewModelAsStream();
+  public initPromiseTest() {
+    this.someListService.initPromiseTest();
+  }
+
+  public initObservableTest() {
+    this.someListService.initObservableTest();
   }
 
   public trackByName(_: number, entry: SomeListEntryViewmodel) {
