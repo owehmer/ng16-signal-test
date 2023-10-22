@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
 import { interval, map, Observable } from "rxjs";
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SomeListDataService {
-
-  constructor() { }
-
   public async getPromiseData() {
     const data = await new Promise<string[]>((resolve) => {
       setTimeout(() => {

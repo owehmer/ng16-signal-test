@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Signal } from '@angular/core';
 import { SomeListService } from "./some-list.service";
 import { SomeListEntryViewmodel, SomeListViewmodel } from "./models";
 import { CommonModule } from "@angular/common";
+import { SomeListDataService } from "./some-list-data.service";
 
 @Component({
   selector: 'app-some-list',
@@ -10,7 +11,7 @@ import { CommonModule } from "@angular/common";
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule],
-  providers: [SomeListService]
+  providers: [SomeListService, SomeListDataService]
 })
 export class SomeListComponent {
   public readonly viewModel: Signal<SomeListViewmodel>;
