@@ -2,6 +2,8 @@
 
 This repository is used to test [signals](https://angular.io/guide/signals), a feature that came with Angular 16
 
+In particlular how easy it is to modify the state and how the change detection works. So always take a look at the DOM changes.
+
 ## How to use / structure
 Navigate to `/src/app/some-list`. There you will find a basic rendering component and all the used services.
 
