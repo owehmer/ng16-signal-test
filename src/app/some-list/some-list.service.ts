@@ -75,9 +75,10 @@ export class SomeListService {
 
   private createVmEntry(currEntries: SomeListEntryViewmodel[], entryTitle: string) {
     const existingEntry = currEntries?.find((entry) => entry.name === entryTitle);
+
     return {
       name: entryTitle,
-      counter: (existingEntry?.counter ?? 0),
+      counter: existingEntry?.counter ?? 0,
       onClick: () => this.increaseCounter(entryTitle)
     }
   }

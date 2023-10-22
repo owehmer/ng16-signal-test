@@ -2,14 +2,11 @@
 <button (click)="initObservableTest()">Observable data test</button>
 
 <ng-container *ngIf="viewModel() as vm">
-  <h1>{{vm.headline}}</h1>
-
-  <div *ngIf="vm.showGlobalLoadingIndicator" class="app-loading-wrapper">
-    <div class="lds-ripple">
-      <div></div>
-      <div></div>
-    </div>
+  <div *ngIf="vm.showGlobalLoadingIndicator" class="loader">
+    <div class="loaderBar"></div>
   </div>
+
+  <h1>{{vm.headline}}</h1>
 
   <ng-container *ngIf="!vm.showEntryLoadingIndicator; else loadingTemplate">
     <h2 *ngIf="!vm.entries || vm.entries.length === 0">No entries</h2>
