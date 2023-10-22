@@ -16,6 +16,12 @@ With different buttons, you can start different scenarios, like
 3. (TODO) Getting invalid data once (Promise based loading)
 4. (TODO) Getting mixed valid and invalid data (Observable based loading)
 
+Check the console logs to see the results of vm property changes.
+
+Currently, there are two different inner components to render an entry.
+One that takes the whole entry model as one binding, and another one that has one binding for each property.
+Play around with vm changes to see how it directly affects the inner change detection.
+
 ### Mapping service
 The mapping service `SomeListService` is mapping data he is getting from the mock data service to the viewmodel `SomeListViewmodel`.
 It also provides an internal used method to modify the current viewmodel state. In this case inceasing a counter property, that each list entry has.
