@@ -1,3 +1,12 @@
+.button-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  & > button:not(:last-child) {
+    margin-bottom: 12px;
+  }
+}
+
 /**
  * loading bar taken from
  * https://codepen.io/stoepke/pen/QOOqGW

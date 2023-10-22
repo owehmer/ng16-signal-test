@@ -1,9 +1,12 @@
-<button (click)="initPromiseTest()">Promise data test</button>
-<button (click)="initObservableTest()">Observable data test</button>
+<div class="button-wrapper">
+  <button (click)="resetVm()">Reset</button>
+  <button (click)="initPromiseTest()">Promise data test</button>
+  <button (click)="initObservableTest()">Observable data test</button>
+</div>
 
 <ng-container *ngIf="viewModel() as vm">
-  <div *ngIf="vm.showGlobalLoadingIndicator" class="loader">
-    <div class="loaderBar"></div>
+  <div class="loader">
+    <div *ngIf="vm.showGlobalLoadingIndicator" class="loaderBar"></div>
   </div>
 
   <h1>{{vm.headline}}</h1>

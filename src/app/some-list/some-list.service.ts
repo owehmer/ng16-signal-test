@@ -58,7 +58,7 @@ export class SomeListService {
     })
   }
 
-  private resetViewModelStateToZero() {
+  public resetViewModelStateToZero() {
     this.obsTest$$?.unsubscribe();
     this.globalLoading$$?.unsubscribe();
     this._viewmodel.set(this.getVmInitState());

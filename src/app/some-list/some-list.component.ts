@@ -27,6 +27,10 @@ export class SomeListComponent {
     this.someListService.initObservableTest();
   }
 
+  public resetVm() {
+    this.someListService.resetViewModelStateToZero();
+  }
+
   public trackByName(_: number, entry: SomeListEntryViewmodel) {
     return entry.name;
   }
