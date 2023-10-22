@@ -3,10 +3,10 @@
 This repository is used to test [signals](https://angular.io/guide/signals), a feature that came with Angular 16
 
 ## How to use / structure
-Navigate to `/src/app/some-list`.
+Navigate to `/src/app/some-list`. There you will find a basic rendering component and all the used services.
 
 ### View component
-There you will find a basic component, that uses a service to get a viewmodel.
+The component uses a service to get a viewmodel, which then is used to render elements in the view.
 With different buttons, you can start different scenarios, like
 
 1. Getting valid data once (Promise based loading)
