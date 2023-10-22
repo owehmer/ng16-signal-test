@@ -3,6 +3,10 @@ import { SomeListService } from "./some-list.service";
 import { SomeListEntryViewmodel, SomeListViewmodel } from "./models";
 import { CommonModule } from "@angular/common";
 import { SomeListDataService } from "./some-list-data.service";
+import { OneBindingEntryComponent } from "./one-binding-entry/one-binding-entry.component";
+import {
+  EveryPropertyBindingEntryComponent
+} from "./every-property-binding-entry/every-property-binding-entry.component";
 
 @Component({
   selector: 'app-some-list',
@@ -10,7 +14,7 @@ import { SomeListDataService } from "./some-list-data.service";
   styleUrls: ['./some-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, OneBindingEntryComponent, EveryPropertyBindingEntryComponent],
   providers: [SomeListService, SomeListDataService]
 })
 export class SomeListComponent {

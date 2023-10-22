@@ -14,9 +14,20 @@
   <ng-container *ngIf="!vm.showEntryLoadingIndicator; else loadingTemplate">
     <h2 *ngIf="!vm.entries || vm.entries.length === 0">No entries</h2>
 
-    <p *ngFor="let entry of vm.entries; trackBy: trackByName" (click)="entry.onClick()">
-      {{entry.name}} -- {{entry.counter}}
-    </p>
+    <!-- Bind the whole model via exactly one binding -->
+    <app-one-binding-entry *ngFor="let entry of vm.entries; trackBy: trackByName"
+                           (click)="entry.onClick()"
+                           [entry]="entry"
+    />
+
+    <div *ngIf="(vm.entries?.length ?? 0) > 0" class="divider"></div>
+
+    <!-- Bind every property on its own -->
+    <app-every-property-binding-entry *ngFor="let entry of vm.entries; trackBy: trackByName"
+                                      (click)="entry.onClick()"
+                                      [counter]="entry.counter"
+                                      [name]="entry.name"
+    />
   </ng-container>
 
   <ng-template #loadingTemplate>
